@@ -48,6 +48,7 @@ namespace PdfSharp.Xamarin.Sample.UWP
 
 				rootFrame.NavigationFailed += OnNavigationFailed;
 
+				FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
 				PdfSharp.Xamarin.Forms.UWP.Platform.Init();
 				global::Xamarin.Forms.Forms.Init(e);
 

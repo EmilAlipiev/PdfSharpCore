@@ -11,14 +11,24 @@ namespace PdfSharp.Xamarin.Sample.Droid
 		{
 			TabLayoutResource = Resource.Layout.Tabbar;
 			ToolbarResource = Resource.Layout.Toolbar;
-
-			PdfSharp.Xamarin.Forms.Droid.Platform.Init();
-
+			
+            RegisterPackages(bundle);
 			base.OnCreate(bundle);
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
 			LoadApplication(new App());
 		}
+
+        private void RegisterPackages(Bundle bundle)
+        {
+            //Forms.SetFlags(flags: new string[] { "CarouselView_Experimental", "Expander_Experimental", "Shapes_Experimental", "SwipeView_Experimental" });
+            //// Rg.Plugins.Popup.Popup.Init(this, bundle);
+            Xamarin.Essentials.Platform.Init(this, bundle);
+            //Rg.Plugins.Popup.Popup.Init(this, bundle);
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
+            var ignore = typeof(FFImageLoading.Svg.Forms.SvgCachedImage);
+            PdfSharp.Xamarin.Forms.Droid.Platform.Init();
+        }
 	}
 }
 

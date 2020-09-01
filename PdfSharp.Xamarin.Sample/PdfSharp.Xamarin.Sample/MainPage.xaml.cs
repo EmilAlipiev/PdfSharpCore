@@ -1,25 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using PdfSharp.Xamarin.Forms;
+
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace PdfSharp.Xamarin.Sample
 {
-	public partial class MainPage : ContentPage
-	{
-		public MainPage()
-		{
-			InitializeComponent();
+    public partial class MainPage : ContentPage
+    {
+        public MainPage()
+        {
+            InitializeComponent();
 
-			picker.ItemsSource = new List<string>() { "Item 1", "Item 2", "Item 3" };
-			picker.SelectedIndex = 0;
-		}
+            picker.ItemsSource = new List<string>() { "Item 1", "Item 2", "Item 3" };
+            picker.SelectedIndex = 0;
+        }
 
-		private void GeneratePDF(object sender, EventArgs e)
-		{
-			var pdf = PDFManager.GeneratePDFFromView(mainGrid);
+        private async void GeneratePDF(object sender, EventArgs e)
+        {
 
-			DependencyService.Get<IPdfSave>().Save(pdf, "SinglePage.pdf");
-		}
-	}
+
+            PermissionStatus status = await GetPermissions(new Permissions.StorageWrite());
+
+            if (status == PermissionStatus.Granted)
+            {
+                var pdf = PDFManager.GeneratePDFFromView(mainGrid);
+                DependencyService.Get<IPdfSave>().Save(pdf, "SinglePage.pdf");
+            }
+            else if (status != PermissionStatus.Unknown)
+            {
+                await DisplayAlert("Storage Access Denied", "Try Again", "OK");
+            }
+
+        }
+
+        public static async Task<PermissionStatus> GetPermissions<T>(T permission) where T : Permissions.BasePermission
+        {
+
+            var status = await permission.CheckStatusAsync();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await permission.RequestAsync();
+            }
+
+            return status;
+        }
+    }
 }

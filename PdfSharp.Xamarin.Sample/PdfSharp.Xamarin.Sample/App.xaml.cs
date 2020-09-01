@@ -1,5 +1,7 @@
 ﻿using Xamarin.Forms;
 
+[assembly: ExportFont("Jost-600-Semi.otf", Alias = "JostSemi")]
+[assembly: ExportFont("Jost-700-Bold.otf", Alias = "JostBold")]
 namespace PdfSharp.Xamarin.Sample
 {
 	public partial class App : Application
